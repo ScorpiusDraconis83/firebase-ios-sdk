@@ -19,6 +19,7 @@ import FirebaseVertexAI
 import VertexAITestApp
 import XCTest
 
+// TODO(#14405): Migrate to Swift Testing and parameterize tests to run on both `v1` and `v1beta`.
 final class IntegrationTests: XCTestCase {
   // Set temperature, topP and topK to lowest allowed values to make responses more deterministic.
   let generationConfig = GenerationConfig(
@@ -53,7 +54,7 @@ final class IntegrationTests: XCTestCase {
 
     vertex = VertexAI.vertexAI()
     model = vertex.generativeModel(
-      modelName: "gemini-1.5-flash",
+      modelName: "gemini-2.0-flash",
       generationConfig: generationConfig,
       safetySettings: safetySettings,
       tools: [],
@@ -79,7 +80,7 @@ final class IntegrationTests: XCTestCase {
     let app = try FirebaseApp.defaultNamedCopy(name: TestAppCheckProviderFactory.notConfiguredName)
     addTeardownBlock { await app.delete() }
     let vertex = VertexAI.vertexAI(app: app)
-    let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
+    let model = vertex.generativeModel(modelName: "gemini-2.0-flash")
     let prompt = "Where is Google headquarters located? Answer with the city name only."
 
     do {
@@ -182,7 +183,7 @@ final class IntegrationTests: XCTestCase {
       parameters: ["x": .integer(), "y": .integer()]
     )
     model = vertex.generativeModel(
-      modelName: "gemini-1.5-flash",
+      modelName: "gemini-2.0-flash",
       tools: [.functionDeclarations([sumDeclaration])],
       toolConfig: .init(functionCallingConfig: .any(allowedFunctionNames: ["sum"]))
     )
@@ -202,7 +203,7 @@ final class IntegrationTests: XCTestCase {
 
   func testCountTokens_jsonSchema() async throws {
     model = vertex.generativeModel(
-      modelName: "gemini-1.5-flash",
+      modelName: "gemini-2.0-flash",
       generationConfig: GenerationConfig(
         responseMIMEType: "application/json",
         responseSchema: Schema.object(properties: [
@@ -225,7 +226,7 @@ final class IntegrationTests: XCTestCase {
     let app = try FirebaseApp.defaultNamedCopy(name: TestAppCheckProviderFactory.notConfiguredName)
     addTeardownBlock { await app.delete() }
     let vertex = VertexAI.vertexAI(app: app)
-    let model = vertex.generativeModel(modelName: "gemini-1.5-flash")
+    let model = vertex.generativeModel(modelName: "gemini-2.0-flash")
     let prompt = "Why is the sky blue?"
 
     do {
